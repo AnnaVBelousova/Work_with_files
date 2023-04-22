@@ -37,48 +37,6 @@ os_code_list, os_type_list. В этой же функции создать гл�
 ПРОШУ ВАС НЕ УДАЛЯТЬ СЛУЖЕБНЫЕ ФАЙЛЫ TXT И ИТОГОВЫЙ ФАЙЛ CSV!!!
 """
 
-import re
-import os
-import pandas
 
-txt = ["info_1.txt", "info_2.txt", "info_3.txt"]
-
-def get_data(txt):
-    #content = []
-    os_prod_list = []
-    os_name_list =[]
-    os_code_list = [] 
-    os_type_list = []
-
-    
-    os_prod_reg = re.compile(r'Изготовитель системы:\s*\S*')
-    os_prod_reg_2 = re.compile(r'Название ОС:\s*\S*')
-    os_prod_reg_3 = re.compile(r'Код продукта:\s*\S*')
-    os_prod_reg_4 = re.compile(r'Тип системы:\s*\S*')
-
-    content=str()
-    for i in range(3):
-        
-
-        my_f = open(txt[i])
-        content_i=my_f.read()
-        content = content+content_i
-        my_f.close()
-
-        print(content)
-    
-    for string in content:
-        #А вот тут уже что-то должно происходить с каждой строкой. Может быть через условия?
-        os_prod_list.append(os_prod_reg.findall(content)[0].split()[2])
-        os_name_list.append(os_prod_reg_2.findall(content)[0].split()[2])
-        os_code_list.append(os_prod_reg_3.findall(content)[0].split()[2])
-        os_type_list.append(os_prod_reg_4.findall(content)[0].split()[2])
-
-    return os_prod_list#, os_name_list, os_code_list, os_type_list
-
-    
-a = get_data(txt)
-print(a)
-
-
-
+os_prod_reg = re.compile(r'Изготовитель системы:\s*\S*')
+os_prod_list.append(os_prod_reg.findall(data)[0].split()[2])
