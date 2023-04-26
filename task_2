@@ -1,51 +1,58 @@
-# Задание 2.
-
-# Реализовать класс Road (дорога), в котором определить защищенные атрибуты:
-# length (длина в метрах), width (ширина в метрах).
-
-# Значения данных атрибутов должны передаваться при создании экземпляра класса.
-
-# Реализовать публичный метод расчета массы асфальта, необходимого для покрытия
-# всего дорожного полотна.
-
-# Использовать формулу: длина * ширина * масса асфальта для покрытия одного кв
-# метра дороги асфальтом, толщиной в 1 см * число м толщины полотна.
-# Массу и толщину сделать публичными атрибутами.
-# Проверить работу метода.
-
-# Например: 20м*5000м*25кг*0.05м = 125000 кг = 125 т
-
 class NonNegative:
 
-    #def __init__(self, my_attr):
-        #self.my_attr = my_attr
     def __set__(self, instance, value):
-        if not isinstance(value, int):
-            raise ValueError("Значение должно быть числом")  
+        if isinstance(value, str):
+            raise ValueError("Значение должно быть числом")
         instance.__dict__[self.my_attr] = value
-        
-    def __set_name__ (self, owner, my_attr):
+
+    def __set_name__(self, owner, my_attr):
         self.my_attr = my_attr
-       
 
-class Road:
-    width = NonNegative()
-    length = NonNegative()
-    mass = 25
-    thickness = 0.05
-    def __init__ (self, width, length): #mass, thickness):
-        self.length = length
-        self.width = width
-        # self.mass = mass
-        # self.thickness = thickness
 
-    def counting_mass(self):
-        total_mass = self.length*self.width*Road.mass*Road.thickness
-        return total_mass
+class Worker:
+    wage = NonNegative()
+    bonus = NonNegative()
 
-width = float(input("Введите ширину, м:"))   
-length = float(input("Введите длину, м:")) 
-# mass = float(input("Введите массу, кг:")) 
-# thickness = float(input("Введите толщину, м:"))
-mass_of_material = Road(width, length)#, mass, thickness)
-print(f'{mass_of_material.counting_mass()} кг')
+    def __init__(self, name, surname, position, wage, bonus):
+        self.name = name
+        self.surname = surname
+        self.position = position
+        self.wage = wage
+        self.bonus = bonus
+        self._income = {"wage": self.wage, "bonus": self.bonus}
+
+
+class Position(Worker):
+    def __init__(self, name, surname, position, wage, bonus):
+        super().__init__(name, surname, position, wage, bonus)
+        self.income = None
+
+    def __str__(self):
+        return f'{name} имеет доход с учетом премии {sum(self.income.values())} рублей'
+
+    def get_full_name(self):
+        return self.name
+
+    def get_total_income(self):
+        self.income = {"wage": self.wage, "bonus": self.bonus}
+        total = sum(self.income.values())
+        return total
+
+
+name = "Петр Петрович"
+surname = "Иванов"
+position = "Сисадмин"
+wage = 50000
+bonus = 30000
+
+obj = Position(name, surname, position, wage, bonus)
+
+print(obj.name)
+print(obj.surname)
+print(obj.position)
+print(obj.wage)
+print(obj.bonus)
+
+print(obj.get_full_name())
+
+print(obj.get_total_income())
