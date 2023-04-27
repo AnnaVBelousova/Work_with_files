@@ -1,0 +1,43 @@
+class TheRoad(type):
+    def __init__(cls, *args, **kwargs):
+        cls.__instance = None
+        super().__init__(*args, **kwargs)
+
+    def __call__(cls, *args, **kwargs):
+        if cls.__instance is None:
+            cls.__instance = super().__call__(*args, **kwargs)
+            return cls.__instance
+        else:
+            return cls.__instance
+
+
+class Road(metaclass=TheRoad):
+    def __init__(self, square, height):
+        if square == 0 or height == 0:
+            raise ValueError("Необходимо передать длину и ширину дороги!")
+        self.square = square
+        self.height = height
+
+
+class RoadWork:
+    def __init__(self, length, width, square=0, height=0):
+        self._road = Road(square, height)
+        self._square = self._road.square
+        self._height = self._road.height
+        self._length = length
+        self._width = width
+        self.mass = self.count_materials()
+
+    def count_materials(self):
+        return int(self._length * self._width * self._square * self._height)
+
+    def report(self):
+        return f"{self._length}м*{self._width}м*{self._square}кг*{self._height}м = {self.mass}кг" \
+               f"{' = ' + str(self.mass / 1000) + 'т' if self.mass // 1000 > 0 else ''}"
+
+
+obj = RoadWork(2000, 50, 25, 0.05)
+obj2 = RoadWork(100, 50, 50, 0.1)
+
+print(obj.report())
+print(obj2.report())
